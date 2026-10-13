@@ -2,38 +2,40 @@
 require_once '../../config/db.php';
 if(isset($_POST['register'])){
 date_default_timezone_set('Asia/Dhaka'); 
-$first_name=$_POST['first_name'];
-$last_name=$_POST['last_name'];
-$email=$_POST['email'];
-$phone=$_POST['phone'];
-$gender=$_POST['gender'];
-$password=$_POST['password'];
-$reg_time=date("Y-m-d");
-/* $inputError=array();
-if(empty($first_name)){
-    $inputError['first_name']="First Name is required";
-}
-if(empty($last_name)){
-    $inputError['last_name']="Last Name is required";
-}
-if(empty($email)){
-    $inputError['email']="Email is required";
-}
-if(empty($phone)){
-    $inputError['phone']="Phone is required";
-}
-if(empty($password)){
-    $inputError['password']="Password is required";
-} */
-}
+$first_name=$_POST['first_name'];$last_name=$_POST['last_name'];$email=$_POST['email'];$phone=$_POST['phone'];$gender=$_POST['gender'];$password=$_POST['password'];$reg_time=date("Y-m-d");
 $inputError=array();
-if (empty($first_name)){
-    $inputError['first_name']="First Name is required";
+if(empty($first_name)){$inputError['first_name']="First Name is required";
+}
+if(empty($last_name)){$inputError['last_name']="Last Name is required";
+}
+if(empty($email)){$inputError['email']="Email is required";
+}
+if(empty($phone)){$inputError['phone']="Phone is required";
+}
+if(empty($password)){$inputError['password']="Password is required";
+}
 
-$text="my name is marzia rahman.";
-/* echo strlen($text);
- echo ucwords($text); */
- echo ucfirst($text);
+  /*   $text="my name is marzia rahman.";
+echo strlen($text);
+ echo ucwords($text);
+ echo ucfirst($text); */
+
+ 
+ if(count($inputError)==0){
+   $email_db_check = mysqli_query($dbcon, "SELECT * FROM users WHERE email='$email'");
+   
+   if(mysqli_num_rows($email_db_check) > 0){$email_db_match = "This email is already exist";
+   } else {
+       $insert_db = mysqli_query($dbcon, "INSERT INTO users (first_name, last_name, email, phone, gender, password) VALUES ('$first_name', '$last_name', '$email', '$phone', '$gender', '$password')");
+       
+       if($insert_db){
+           echo "<script>
+           alert('Successfully registered!');
+           window.location.href='register.php';
+           </script>";
+       }
+   }
+}
 
 }
 
@@ -85,10 +87,11 @@ $text="my name is marzia rahman.";
                             type="text"
                             id="first_name"
                             name="first_name"
-                            placeholder="Enter first name" value="<?php if(isset($first_name)){echo $first_name;}?>"
+                            placeholder="Enter first name" value="<?php if(isset($first_name)){echo$first_name;}?>"
                         > 
-                        <!-- <label style="color:red;" for=""><?php if(isset($inputError['first_name'])){echo $inputError['first_name'];}?></label> -->
-                        <label style="color:red;" for=""><?php if(isset($inputError['first_name'])){echo $inputError['first_name'];}?></label>
+                        <label style="color:red;" for=""><?php if(isset($inputError['first_name'])){echo$inputError['first_name'];}?></label>
+                       
+                      
                     </div>
 
 
@@ -99,9 +102,9 @@ $text="my name is marzia rahman.";
                             type="text"
                             id="last_name"
                             name="last_name"
-                            placeholder="Enter last name" <!-- value="<?php if(isset($last_name)){echo $last_name;}?>" -->
+                            placeholder="Enter last name" value="<?php if(isset($last_name)){echo$last_name;}?>"
                            
-                        > <label style="color:red;" for=""><?php if(isset($inputError['last_name'])){echo $inputError['last_name'];}?></label>
+                        > <label style="color:red;" for=""><?php if(isset($inputError['last_name'])){echo$inputError['last_name'];}?></label>
                     </div>
 
                 </div>
@@ -114,9 +117,10 @@ $text="my name is marzia rahman.";
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Enter your email" value="<?php if(isset($email)){echo $email;}?>"
+                        placeholder="Enter your email" value="<?php if(isset($email)){echo$email;}?>"
                        
-                    > <label style="color:red;" for=""><?php if(isset($inputError['email'])){echo $inputError['email'];}?></label>
+                    > <label style="color:red;" for=""><?php if(isset($inputError['email'])){echo$inputError['email'];}?></label>
+                     <label style="color:red;"><?php if(isset($email_db_match)){echo $email_db_match;}?></label>
                 </div>
 
 
@@ -127,9 +131,9 @@ $text="my name is marzia rahman.";
                         type="tel"
                         id="phone"
                         name="phone"
-                        placeholder="Enter phone number" value="<?php if(isset($phone)){echo $phone;}?>"
+                        placeholder="Enter phone number" value="<?php if(isset($phone)){echo$phone;}?>"
                        
-                    > <label style="color:red;" for=""><?php if(isset($inputError['phone'])){echo $inputError['phone'];}?></label>
+                    > <label style="color:red;" for=""><?php if(isset($inputError['phone'])){echo$inputError['phone'];}?></label>
                 </div>
 
 
@@ -182,9 +186,9 @@ $text="my name is marzia rahman.";
                             type="password"
                             id="password"
                             name="password"
-                            placeholder="Enter password" value="<?php if(isset($password)){echo $password;}?>"
+                            placeholder="Enter password" value="<?php if(isset($password)){echo$password;}?>"
                            
-                        > <label style="color:red;" for=""><?php if(isset($inputError['password'])){echo $inputError['password'];}?></label>
+                        > <label style="color:red;" for=""><?php if(isset($inputError['password'])){echo$inputError['password'];}?></label>
 
                     </div>
 
@@ -244,4 +248,3 @@ $text="my name is marzia rahman.";
 
 </body>
 </html>
-```
